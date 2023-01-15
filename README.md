@@ -5,9 +5,9 @@
 - Python 3.7
 - run `pip install --editable .` to install required dependencies
 
-You also need to have a fully trained NMT model and its output by fairseq for your desired language pair, before starting to run the code. So you will have two parallel folders: 1. A clone of this repo 2. Original Fairseq folder with your NMT experiments.
+You also need to have a fully trained NMT model by the [Fairseq](https://github.com/facebookresearch/fairseq) for your desired language pair, before starting to run the code. So you will have two parallel folders: 1. A clone of this repo 2. Original Fairseq folder with your NMT experiments.
 
-The following commands are based on IWSLT14 dataset. Change it according to your own dataset.
+The following commands are based on IWSLT14 dataset. Change it according to your own data.
 
 ## Generating oracle action sequences
 In order to generate action sequences for Test set run the the following command:
@@ -28,10 +28,10 @@ The directory `/path/to/datafolder/data-bin/iwslt14.tokenized.de-en/` refers to 
 Then you can run:
 
 ```
-python scripts/sort-sentences.py /path/to/model/folder/nmt_trans_iwslt14_ende_base/action_sequence.txt 5 > /path/to/model/folder/nmt_trans_iwslt14_ende_base/action_sequence.lines.txt
+python scripts/sort-actions.py /path/to/model/folder/nmt_trans_iwslt14_ende_base/action_sequence.txt 5 > /path/to/model/folder/nmt_trans_iwslt14_ende_base/action_sequence.lines.txt
 ```
 
-to have a clean folder of action sequences for each sentence.
+to have a clean folder of action sequences for each sentence. The `sort-source.py` and `sort-target.py` also extracts the source and target sentences respectively.
 
 ## Training the model
 
@@ -50,7 +50,7 @@ python fairseq_cli/generate_input.py /path/to/datafolder/iwslt14.tokenized.de-en
 --beam 5
 --has-target False > /path/to/model/folder/nmt_trans_iwslt14_ende_base/test.beam5_notarget.input.txt
 ```
-
+Repeat above command for the train, valid, and test subsets and then run `run_generate_input.sh` to generate appropriate inputs for training. Please double check the value for `mt_path` and `data_folder` in the `run_generate_input.sh` to make sure the script is running on the right directory.\
 Then we can pass these files to start training the model:
 
 ```
