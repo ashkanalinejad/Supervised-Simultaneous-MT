@@ -1,16 +1,13 @@
 #!/bin/bash
 
-#agent_path=agent5_trans_iwslt14_ende_big_nmt_bi_prepinput_mixed
-agent_path=agent5_trans_iwslt14_ende_big_nmt_bi_prepinput_mixed_new2
-data_path=./../fairseq/examples/translation/iwslt14.tokenized.de-en/bin-en_de/
-nmt_path=./nmt_trans_iwslt14_ende_base/checkpoint_best.pt
+agent_path=agent5_trans_iwslt14_ende_big_nmt_bi_prepinput
+data_path=/path/to/datafolder/data-bin/iwslt14.tokenized.de-en/
+nmt_path=/path/to/model/folder/nmt_trans_iwslt14_ende_base/checkpoint_best.pt
 gen_subset=test
 
 src=en
 trg=de
 ref_file=$agent_path/test.word.de
-
-#CUDA_VISIBLE_DEVICES="" python fairseq_cli/generate_simultaneous.py $data_path -s $src -t $trg  --user-dir ../examples/Supervised_simul_MT --task Supervised_simultaneous_translation --gen-subset $gen_subset --path $nmt_path --left-pad-source False --max-tokens 8000 --skip-invalid-size-inputs-valid-test --has-target False --beam 5 --agent-path $agent_path/checkpoint1.pt
 
 
 for f in $agent_path/checkpoint1.pt; do
