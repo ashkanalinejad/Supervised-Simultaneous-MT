@@ -1,7 +1,15 @@
 # Supervised Simultaneous Machine Translation
 
-You may need to run `pip install --editable .` first.
+## Requirements
 
+- Python 3.7
+- run `pip install --editable .` to install required dependencies
+
+You also need to have a fully trained NMT model and its output by fairseq for your desired language pair, before starting to run the code. So you will have two parallel folders: 1. A clone of this repo 2. Original Fairseq folder with your NMT experiments.
+
+The following commands are based on IWSLT14 dataset. Change it according to your own dataset. `/path/to/datafolder/data-bin/iwslt14.tokenized.de-en/` refers to the bin folder of modified data by fairseq, where the .bin and .idx files are located. You may need to add an additional dictionary for the actions. There is a sample action dictionary in this repo, called: "dict.act.txt".
+
+## Generating oracle action sequences
 In order to generate action sequences for Test set run the the following command:
 
 ```
@@ -89,3 +97,7 @@ python fairseq_cli/generate_simultaneous.py /path/to/datafolder/iwslt14.tokenize
 --agent-path ./agent5_trans_iwslt14_ende_big_nmt_bi_prepinput/checkpoint_last.pt
 --beam 5 > ./agent5_trans_iwslt14_ende_big_nmt_bi_prepinput/test_action_seq_beam5_last.txt
 ```
+
+## Liscence
+
+Main parts of the code is coming from https://github.com/facebookresearch/fairseq. All its liscenes also applies to this repo.
