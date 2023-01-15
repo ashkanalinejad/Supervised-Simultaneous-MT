@@ -51,10 +51,24 @@ python fairseq_cli/generate_input.py /path/to/datafolder/iwslt14.tokenized.de-en
 --has-target False > /path/to/model/folder/nmt_trans_iwslt14_ende_base/test.beam5_notarget.input.txt
 ```
 Repeat above command for the train, valid, and test subsets and then run `run_generate_input.sh` to generate appropriate inputs for training. Please double check the value for `mt_path` and `data_folder` in the `run_generate_input.sh` to make sure the script is running on the right directory.\
+\
+The last step to preprocess the data before training is to run:
+```
+python preprocess.py -s src -t trg -a act 
+--trainpref data_input/nmt_trans_iwslt14_ende_base/train.beam5_notarget.input.txt
+—validpref data_input/nmt_trans_iwslt14_ende_base/valid.beam5_notarget.input.txt
+—testpref data_input/nmt_trans_iwslt14_ende_base/test.beam5_notarget.input.txt
+--tgtdict data_input/nmt_trans_iwslt14_ende_base/dict.trg.txt 
+--srcdict data_input/nmt_trans_iwslt14_ende_base/dict.src.txt 
+--actdict data_input/nmt_trans_iwslt14_ende_base/dict.act.txt
+--destdir data_input/nmt_trans_iwslt14_ende_base/bin-data
+```
+Before running this you should copy the dictionaries from the bin folder of the Fairseq data directory `/path/to/datafolder/data-bin/iwslt14.tokenized.de-en/` and change the name of the `dict.en.txt` and `dict.de.txt` to `dict.src.txt` and `dict.trg.txt` names respectively. This way we can ensure we'll use the same dictionary as the NMT model.
+\
 Then we can pass these files to start training the model:
 
 ```
-python train.py /path/to/datafolder/nmt_trans_iwslt14_ende_base/bin-data
+python train.py data_input/nmt_trans_iwslt14_ende_base/bin-data
 -s src -t trg
 --clip-norm 5
 --save-dir ./agent5_trans_iwslt14_ende_big_nmt_bi_prepinput/
@@ -82,22 +96,7 @@ python train.py /path/to/datafolder/nmt_trans_iwslt14_ende_base/bin-data
 
 ## Testing the model
 
-After finishing the training process, we can use the following command to generate the actions and translations simultaneously:
-
-```
-python fairseq_cli/generate_simultaneous.py /path/to/datafolder/iwslt14.tokenized.de-en/bin-en_de/
--s en -t de
---user-dir ../examples/Supervised_simul_MT
---task Supervised_simultaneous_translation
---gen-subset test
---path /path/to/model/folder/nmt_trans_iwslt14_ende_base/checkpoint_best.pt
---left-pad-source False
---max-tokens 8000
---skip-invalid-size-inputs-valid-test
---has-target False
---agent-path ./agent5_trans_iwslt14_ende_big_nmt_bi_prepinput/checkpoint_last.pt
---beam 5 > ./agent5_trans_iwslt14_ende_big_nmt_bi_prepinput/test_action_seq_beam5_last.txt
-```
+After finishing the training process, we can use the `run_generate_simultaneous_ende_nmt.sh` to generate the actions and translations simultaneously, and receive the evaluation metrics. Please open the script and change the values for `agent_path`, `data_path` \[The path to the Fairseq data bin directory\] , `nmt_path`, and `ref_file` \[The path to the reference file that you want to use as the gold translations.\] according to your local directories.
 
 ## Liscence
 
