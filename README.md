@@ -7,7 +7,7 @@
 
 You also need to have a fully trained NMT model and its output by fairseq for your desired language pair, before starting to run the code. So you will have two parallel folders: 1. A clone of this repo 2. Original Fairseq folder with your NMT experiments.
 
-The following commands are based on IWSLT14 dataset. Change it according to your own dataset. `/path/to/datafolder/data-bin/iwslt14.tokenized.de-en/` refers to the bin folder of modified data by fairseq, where the .bin and .idx files are located. You may need to add an additional dictionary for the actions. There is a sample action dictionary in this repo, called: `dict.act.txt`. Place this in the same data folder next next to the other data files.
+The following commands are based on IWSLT14 dataset. Change it according to your own dataset.
 
 ## Generating oracle action sequences
 In order to generate action sequences for Test set run the the following command:
@@ -24,7 +24,8 @@ python fairseq_cli/generate_action.py /path/to/datafolder/data-bin/iwslt14.token
 --max-tokens 8000
 --beam 10 > /path/to/model/folder/nmt_trans_iwslt14_ende_base/action_sequence.txt
 ```
-Then you can run
+The directory `/path/to/datafolder/data-bin/iwslt14.tokenized.de-en/` refers to the bin folder of modified data by fairseq, where the .bin and .idx files are located. You may need to add an additional dictionary for the actions. There is a sample action dictionary in this repo, called: `dict.act.txt`. Place this in the same data folder next next to the other data files.
+Then you can run:
 
 ```
 python scripts/sort-sentences.py /path/to/model/folder/nmt_trans_iwslt14_ende_base/action_sequence.txt 5 > /path/to/model/folder/nmt_trans_iwslt14_ende_base/action_sequence.lines.txt
